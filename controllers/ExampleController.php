@@ -145,9 +145,18 @@ class ExampleController extends Controller {
                     break;
 
                 case "action_view_$table":
+
+                    if (isset($vars['select_fields'])) {
+                        $select_fields = $vars['select_fields'];
+                        unset($vars['select_fields']);
+                    }
+                    else {
+                        $select_fields = null;
+                    }
+
                     return json_encode(
                         #Model::view($vars, $ClassName)
-                        Db::viewTable($table, $vars)
+                        Db::viewTable($table, $vars, $select_fields)
                     );
                     break;
 
