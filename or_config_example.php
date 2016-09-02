@@ -5,6 +5,10 @@ const URI_PREFIX = '/orm_router';
 { # orm_router specific vars
     $ControllerClass = 'ExampleController';
     $hash_password_fields = true;
+
+    # SECURITY NOTICE: turn this off for production!
+    # It exposes raw SQL queries. Useful for debugging.
+    $show_internal_result_details = true;
 }
 
 { # new config style
