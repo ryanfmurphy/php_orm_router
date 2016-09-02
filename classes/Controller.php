@@ -6,7 +6,10 @@ class Controller {
     public static $remainingUri = null;
 
 	# look at url and determine route
-	public static function check_route($uri = null, $uriPrefix = URI_PREFIX) {
+	public static function check_route($uri = null, $uriPrefix = null) {
+        global $uri_prefix;
+        if ($uriPrefix === null) $uriPrefix = $uri_prefix;
+
         if ($uri === null) {
             $uri = $_SERVER['REQUEST_URI'];
         }

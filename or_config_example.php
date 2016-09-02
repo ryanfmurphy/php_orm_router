@@ -1,8 +1,10 @@
 <?php
+
+const URI_PREFIX = '/orm_router';
+
 { # orm_router specific vars
-    define('URI_PREFIX', '/orm_router');
     $ControllerClass = 'ExampleController';
-    $hash_password_field = true;
+    $hash_password_fields = true;
 }
 
 { # new config style
