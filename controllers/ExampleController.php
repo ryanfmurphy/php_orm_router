@@ -110,6 +110,14 @@ class ExampleController extends Controller {
 
     # generic router
     public static function __callStatic($method, $args) {
+        global $automatic_API_layer;
+
+        if (!isset($automatic_API_layer)
+            || !$automatic_API_layer
+        ) {
+            return self::action_404();
+        }
+
         $matchesActionPattern = preg_match("/^
             action
             _(?<action>get|get1|view|create|update|delete)
