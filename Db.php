@@ -215,7 +215,8 @@ if (!class_exists('Db')) {
             if (isset($rowVars['where_clauses'])) {
                 $whereClauses = $rowVars['where_clauses'];
                 unset($rowVars['where_clauses']);
-                $sql = self::buildDeleteSql($table_name, $whereClauses);
+                $sql = self::buildDeleteSql($table_name, $rowVars, $whereClauses);
+                die($sql);
                 return self::sql($sql);
                 #return self::queryFetch($sql);
             }
@@ -248,6 +249,7 @@ if (!class_exists('Db')) {
         }
 
         public static function buildDeleteSql($table_name, $whereClauses) {
+
             { # build sql
                 $sql = "delete from $table_name ";
 
