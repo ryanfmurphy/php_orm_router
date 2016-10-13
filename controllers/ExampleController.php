@@ -177,12 +177,12 @@ class ExampleController extends Controller {
                 case "action_update_$table":
                     return json_encode(
                         #Model::update($vars, $ClassName)
-                        Db::updateRow($table, $vars)
+                        Db::updateRows($table, $vars)
                     );
 
                 case "action_delete_$table":
                     return json_encode(
-                        Db::deleteRow($table, $vars)
+                        Db::deleteRows($table, $vars)
                     );
 
                 default:
