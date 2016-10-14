@@ -1,4 +1,22 @@
 <?php
+if (!class_exists('Util')) {
+
+    class Util {
+
+        public static function endsWith($needle,$haystack) {
+            $len = strlen($needle);
+            $LEN = strlen($haystack);
+            return substr($haystack, $LEN - $len) == $needle;
+        }
+
+        public static function quote($val) {
+            global $db; #todo will this global work in all cases?
+            #todo #fixme might not work for nulls?
+            return $db->quote($val);
+        }
+    }
+
+}
 
 if (!class_exists('DbUtil')) {
 
@@ -204,20 +222,20 @@ if (!class_exists('DbUtil')) {
                 $tablename_root = self::full_tablename($tablename_root);
             }
 
-            { # doctor field_name
-                if ($suffix) {
-                    self::log("  id_only mode?\n");
-                    if ($id_mode == 'id_only') {
-                        self::log("    yes.  trimming before suffix (#todo do this earlier in findTablePrefix fn)\n");
-                        $field_name = ltrim($suffix,'_'); #todo this seems dangerous! will this really work in all cases?
-                        self::log("    now trimmed field_name = '$field_name'\n");
+                { # doctor field_name
+                    if ($suffix) {
+                        self::log("  id_only mode?\n");
+                        if ($id_mode == 'id_only') {
+                            self::log("    yes.  trimming before suffix (#todo do this earlier in findTablePrefix fn)\n");
+                            $field_name = ltrim($suffix,'_'); #todo this seems dangerous! will this really work in all cases?
+                            self::log("    now trimmed field_name = '$field_name'\n");
+                        }
+                        #todo maybe error out if didn't match a table?
                     }
-                    #todo maybe error out if didn't match a table?
+                    else { # no-suffix, probably a name field
+                        $field_name = 'name';
+                    }
                 }
-                else { # no-suffix, probably a name field
-                    $field_name = 'name';
-                }
-            }
 
             return array($tablename_root, $field_name);
         }
@@ -331,9 +349,9 @@ if (!class_exists('DbUtil')) {
 
         public static function log($msg, $level=0) {
             if ($level < 5) {
-                do_log($msg);
+                #do_log($msg);
+                error_log($msg, 3, __DIR__.'/error_log');
             }
-            #error_log($msg, 3, __DIR__.'/error_log');
         }
 
         public static function val_list_str($vals) {
@@ -613,7 +631,7 @@ infer_limit_from_query: query didn't match regex.
             $maybeOffset = ($offset !== null
                                 ? " offset $offset"
                                 : "");
-            return "?sql=$query" . $maybeLimit . $maybeOffset
+            return "?sql=" . urlencode($query) . $maybeLimit . $maybeOffset
                    . "&db_type=$db_type";
         }
 
